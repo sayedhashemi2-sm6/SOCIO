@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOCIO — Connect. Share. Discover.</title>
+
+<style>
+:root{
+    --bg:#f5f6fb;
+    --surface:#ffffff;
+    --surface-2:#f0f1f7;
+    --text:#171827;
+    --muted:#777b91;
+    --border:#e6e7ef;
+    --accent:#7657ff;
+    --accent-2:#367cff;
+    --accent-gradient:linear-gradient(135deg,#7b4dff,#367cff);
+    --danger:#ef476f;
+    --success:#18b981;
+    --shadow:0 12px 35px rgba(40,35,80,.08);
+    --shadow-small:0 5px 18px rgba(40,35,80,.07);
+    --radius:20px;
+}
+
+body.dark{
+    --bg:#0d0f17;
+    --surface:#161925;
+    --surface-2:#202332;
+    --text:#f5f6ff;
+    --muted:#969aae;
+    --border:#2a2e3e;
+    --shadow:0 15px 40px rgba(0,0,0,.25);
+    --shadow-small:0 5px 20px rgba(0,0,0,.2);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:.25s ease;
+}
+
+button,
+input,
+textarea{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.97);
+}
+
+.app{
+    min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+.topbar{
+    height:72px;
+    background:rgba(255,255,255,.88);
+    border-bottom:1px solid var(--border);
+    backdrop-filter:blur(18px);
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:100;
+}
+
+.dark .topbar{
+    background:rgba(22,25,37,.9);
+}
+
+.topbar-inner{
+    height:100%;
+    max-width:1440px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:24px;
+    padding:0 24px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:220px;
+}
+
+.logo-mark{
+    width:40px;
+    height:40px;
+    border-radius:13px;
+    background:var(--accent-gradient);
+    color:#fff;
+    display:grid;
+    place-items:center;
+    font-weight:900;
+    font-size:18px;
+    box-shadow:0 7px 18px rgba(102,75,255,.3);
+}
+
+.logo-text{
+    font-size:23px;
+    font-weight:900;
+    letter-spacing:-.7px;
+}
+
+.logo-tagline{
+    color:var(--muted);
+    font-size:11px;
+    display:block;
+    margin-top:-2px;
+}
+
+.search-wrap{
+    flex:1;
+    max-width:580px;
+    position:relative;
+}
+
+.search-wrap svg{
+    position:absolute;
+    width:19px;
+    left:17px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--muted);
+}
+
+.search{
+    width:100%;
+    height:44px;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    border-radius:14px;
+    padding:0 18px 0 47px;
+    color:var(--text);
+    outline:none;
+    transition:.2s;
+}
+
+.search:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(118,87,255,.1);
+}
+
+.header-actions{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    background:var(--surface-2);
+    color:var(--text);
+    display:grid;
+    place-items:center;
+    transition:.2s;
+}
+
+.icon-btn:hover{
+    background:rgba(118,87,255,.12);
+    color:var(--accent);
+}
+
+.icon-btn svg{
+    width:20px;
+}
+
+.header-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    color:#fff;
+    display:grid;
+    place-items:center;
+    font-weight:800;
+    border:2px solid var(--surface);
+    box-shadow:0 0 0 2px var(--accent);
+}
+
+/* ================= LAYOUT ================= */
+
+.layout{
+    max-width:1440px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:235px minmax(0,650px) 300px;
+    gap:25px;
+    padding:97px 24px 40px;
+}
+
+.sidebar{
+    position:sticky;
+    top:96px;
+    height:calc(100vh - 120px);
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    padding:13px 15px;
+    border-radius:14px;
+    color:var(--muted);
+    background:transparent;
+    text-align:left;
+    font-weight:650;
+    transition:.2s;
+}
+
+.nav-item svg{
+    width:21px;
+    height:21px;
+}
+
+.nav-item:hover{
+    background:var(--surface);
+    color:var(--text);
+    box-shadow:var(--shadow-small);
+}
+
+.nav-item.active{
+    color:var(--accent);
+    background:rgba(118,87,255,.11);
+}
+
+.create-nav{
+    margin-top:14px;
+    width:100%;
+    padding:13px;
+    color:#fff;
+    background:var(--accent-gradient);
+    border-radius:14px;
+    font-weight:800;
+    box-shadow:0 10px 22px rgba(87,86,255,.25);
+}
+
+.demo-note{
+    position:absolute;
+    bottom:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:15px;
+    font-size:11px;
+    line-height:1.5;
+    color:var(--muted);
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    min-width:0;
+}
+
+.page{
+    display:none;
+    animation:pageIn .3s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+    from{opacity:0;transform:translateY(6px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.mobile-page-title{
+    display:none;
+}
+
+.card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-small);
+}
+
+/* ================= COMPOSER ================= */
+
+.composer{
+    padding:18px;
+    margin-bottom:18px;
+}
+
+.composer-top{
+    display:flex;
+    gap:13px;
+}
+
+.avatar{
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    flex:0 0 auto;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-weight:800;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);
+}
+
+.avatar-sayed{background:linear-gradient(135deg,#ff8a9b,#c46bff)}
+.avatar-alex{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+.avatar-mia{background:linear-gradient(135deg,#fa709a,#fee140)}
+.avatar-jay{background:linear-gradient(135deg,#43e97b,#38f9d7)}
+.avatar-jordan{background:linear-gradient(135deg,#667eea,#764ba2)}
+
+.composer textarea{
+    flex:1;
+    min-height:70px;
+    resize:none;
+    border:0;
+    outline:none;
+    color:var(--text);
+    background:transparent;
+    padding:9px 4px;
+    font-size:15px;
+}
+
+.composer-bottom{
+    margin-top:10px;
+    padding-top:13px;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.composer-tools{
+    display:flex;
+    gap:6px;
+}
+
+.tool-btn{
+    padding:8px 11px;
+    border-radius:10px;
+    background:transparent;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:650;
+}
+
+.tool-btn:hover{
+    background:var(--surface-2);
+    color:var(--accent);
+}
+
+.primary-btn{
+    background:var(--accent-gradient);
+    color:white;
+    padding:10px 20px;
+    border-radius:11px;
+    font-weight:800;
+    box-shadow:0 7px 17px rgba(96,75,255,.2);
+}
+
+/* ================= POSTS ================= */
+
+.post{
+    padding:19px;
+    margin-bottom:15px;
+    transition:.2s;
+}
+
+.post:hover{
+    box-shadow:var(--shadow);
+    transform:translateY(-1px);
+}
+
+.post-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.post-user{
+    min-width:0;
+    flex:1;
+}
+
+.post-name-row{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.post-name{
+    font-weight:800;
+    font-size:14px;
+}
+
+.verified{
+    width:15px;
+    height:15px;
+    background:var(--accent);
+    color:#fff;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:9px;
+}
+
+.post-handle,
+.post-time{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.post-more{
+    background:transparent;
+    color:var(--muted);
+    font-size:20px;
+    width:32px;
+    height:32px;
+    border-radius:9px;
+}
+
+.post-more:hover{
+    background:var(--surface-2);
+}
+
+.post-body{
+    margin:14px 0 15px 58px;
+    font-size:14px;
+    line-height:1.7;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.hashtag{
+    color:var(--accent);
+    font-weight:700;
+}
+
+.post-actions{
+    margin-left:58px;
+    display:flex;
+    justify-content:space-between;
+    border-top:1px solid var(--border);
+    padding-top:10px;
+}
+
+.post-action{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:var(--muted);
+    background:transparent;
+    padding:7px 10px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.post-action svg{
+    width:18px;
+}
+
+.post-action:hover{
+    background:var(--surface-2);
+    color:var(--accent);
+}
+
+.post-action.liked{
+    color:#f04473;
+    background:rgba(240,68,115,.09);
+}
+
+.post-action.liked svg{
+    fill:currentColor;
+}
+
+/* ================= COMMENTS ================= */
+
+.comments{
+    margin:12px 0 0 58px;
+    border-top:1px solid var(--border);
+    padding-top:13px;
+}
+
+.comment{
+    display:flex;
+    gap:9px;
+    margin-bottom:11px;
+}
+
+.comment .avatar{
+    width:30px;
+    height:30px;
+    font-size:10px;
+}
+
+.comment-content{
+    background:var(--surface-2);
+    border-radius:12px;
+    padding:8px 11px;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.comment-content strong{
+    display:block;
+    margin-bottom:2px;
+}
+
+.comment-form{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.comment-form input{
+    flex:1;
+    min-width:0;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text);
+    border-radius:10px;
+    padding:9px 11px;
+    outline:none;
+}
+
+.comment-form button{
+    background:var(--accent);
+    color:#fff;
+    padding:0 14px;
+    border-radius:10px;
+    font-weight:700;
+}
+
+/* ================= RIGHT SIDEBAR ================= */
+
+.rightbar{
+    position:sticky;
+    top:96px;
+    align-self:start;
+}
+
+.widget{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:17px;
+    box-shadow:var(--shadow-small);
+}
+
+.widget-title{
+    font-weight:850;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.follow-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.follow-info{
+    min-width:0;
+    flex:1;
+}
+
+.follow-info strong{
+    display:block;
+    font-size:13px;
+}
+
+.follow-info span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:2px;
+}
+
+.follow-btn{
+    background:var(--text);
+    color:var(--surface);
+    border-radius:9px;
+    padding:7px 11px;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.follow-btn.following{
+    background:rgba(118,87,255,.12);
+    color:var(--accent);
+}
+
+.trend{
+    margin-bottom:14px;
+}
+
+.trend small{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.trend strong{
+    display:block;
+    margin:2px 0;
+    font-size:13px;
+}
+
+.trend span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* ================= EXPLORE ================= */
+
+.section-heading{
+    margin-bottom:17px;
+}
+
+.section-heading h1{
+    font-size:24px;
+    letter-spacing:-.5px;
+}
+
+.section-heading p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:3px;
+}
+
+.explore-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.discover-card{
+    min-height:160px;
+    border-radius:20px;
+    padding:20px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    background:var(--accent-gradient);
+}
+
+.discover-card:nth-child(2){
+    background:linear-gradient(135deg,#ff6a88,#ff9a44);
+}
+
+.discover-card:nth-child(3){
+    background:linear-gradient(135deg,#00b09b,#96c93d);
+}
+
+.discover-card:nth-child(4){
+    background:linear-gradient(135deg,#614385,#516395);
+}
+
+.discover-card h3{
+    font-size:18px;
+    margin-bottom:7px;
+}
+
+.discover-card p{
+    font-size:12px;
+    opacity:.85;
+    line-height:1.5;
+}
+
+.discover-icon{
+    position:absolute;
+    right:-10px;
+    bottom:-20px;
+    font-size:85px;
+    opacity:.16;
+}
+
+.trending-list{
+    margin-top:17px;
+}
+
+/* ================= NOTIFICATIONS ================= */
+
+.notification{
+    padding:16px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+}
+
+.notification:last-child{
+    border-bottom:0;
+}
+
+.notification-icon{
+    width:40px;
+    height:40px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    background:rgba(118,87,255,.12);
+    color:var(--accent);
+}
+
+.notification p{
+    font-size:13px;
+    line-height:1.45;
+}
+
+.notification span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:2px;
+}
+
+/* ================= MESSAGES ================= */
+
+.messages-layout{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    min-height:600px;
+    overflow:hidden;
+}
+
+.conversations{
+    border-right:1px solid var(--border);
+}
+
+.conversation{
+    padding:13px;
+    display:flex;
+    gap:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.conversation:hover,
+.conversation.active{
+    background:rgba(118,87,255,.08);
+}
+
+.conversation-info{
+    min-width:0;
+}
+
+.conversation-info strong{
+    display:block;
+    font-size:13px;
+}
+
+.conversation-info span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    max-width:130px;
+}
+
+.chat{
+    display:flex;
+    flex-direction:column;
+}
+
+.chat-head{
+    padding:16px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.chat-head strong{
+    font-size:14px;
+}
+
+.chat-head span{
+    display:block;
+    color:var(--success);
+    font-size:10px;
+}
+
+.chat-body{
+    flex:1;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    overflow:auto;
+    min-height:440px;
+    max-height:480px;
+}
+
+.bubble{
+    max-width:72%;
+    padding:10px 13px;
+    border-radius:15px;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.bubble.them{
+    background:var(--surface-2);
+    align-self:flex-start;
+    border-bottom-left-radius:4px;
+}
+
+.bubble.me{
+    background:var(--accent-gradient);
+    color:#fff;
+    align-self:flex-end;
+    border-bottom-right-radius:4px;
+}
+
+.chat-input{
+    border-top:1px solid var(--border);
+    padding:12px;
+    display:flex;
+    gap:8px;
+}
+
+.chat-input input{
+    flex:1;
+    min-width:0;
+    background:var(--surface-2);
+    color:var(--text);
+    border:0;
+    outline:0;
+    border-radius:12px;
+    padding:11px 13px;
+}
+
+.chat-input button{
+    width:45px;
+    border-radius:12px;
+    background:var(--accent-gradient);
+    color:#fff;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-cover{
+    height:170px;
+    border-radius:20px 20px 0 0;
+    background:linear-gradient(135deg,#7b4dff,#367cff,#00c6ff);
+    position:relative;
+}
+
+.profile-cover::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 30%,rgba(255,255,255,.25),transparent 25%),
+        radial-gradient(circle at 80% 70%,rgba(255,255,255,.2),transparent 25%);
+}
+
+.profile-main{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-top:0;
+    padding:0 23px 23px;
+    border-radius:0 0 20px 20px;
+}
+
+.profile-avatar{
+    width:92px;
+    height:92px;
+    border-radius:50%;
+    border:5px solid var(--surface);
+    margin-top:-46px;
+    position:relative;
+    z-index:2;
+    font-size:25px;
+}
+
+.profile-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:-43px;
+    position:relative;
+    z-index:3;
+}
+
+.outline-btn{
+    border:1px solid var(--border);
+    color:var(--text);
+    background:var(--surface);
+    padding:9px 15px;
+    border-radius:11px;
+    font-weight:750;
+}
+
+.profile-name{
+    margin-top:15px;
+    font-size:23px;
+    font-weight:900;
+}
+
+.profile-handle{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.profile-bio{
+    margin-top:12px;
+    line-height:1.55;
+    font-size:13px;
+    max-width:500px;
+}
+
+.stats{
+    display:flex;
+    gap:25px;
+    margin-top:17px;
+}
+
+.stat strong{
+    font-size:16px;
+}
+
+.stat span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.profile-posts{
+    margin-top:18px;
+}
+
+/* ================= SEARCH ================= */
+
+.search-results{
+    margin-top:15px;
+}
+
+.result-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:15px;
+    margin-bottom:10px;
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+    padding:50px 20px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.empty-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+/* ================= MODAL ================= */
+
+.modal-backdrop{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(10,10,20,.55);
+    backdrop-filter:blur(5px);
+    z-index:300;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-backdrop.open{
+    display:flex;
+}
+
+.modal{
+    width:min(500px,100%);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:20px;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+    animation:modalIn .25s ease;
+}
+
+@keyframes modalIn{
+    from{opacity:0;transform:translateY(15px) scale(.97)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.modal-head h2{
+    font-size:18px;
+}
+
+.close{
+    width:34px;
+    height:34px;
+    border-radius:9px;
+    background:var(--surface-2);
+    color:var(--text);
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    bottom:25px;
+    left:50%;
+    transform:translate(-50%,20px);
+    background:#171827;
+    color:white;
+    padding:11px 17px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:650;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    z-index:500;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* ================= MOBILE NAV ================= */
+
+.mobile-nav{
+    display:none;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1100px){
+    .layout{
+        grid-template-columns:80px minmax(0,650px) 260px;
+    }
+
+    .logo{
+        min-width:auto;
+        justify-content:center;
+    }
+
+    .logo-text-wrap,
+    .nav-item span,
+    .create-nav span,
+    .demo-note{
+        display:none;
+    }
+
+    .nav-item{
+        justify-content:center;
+        padding:14px;
+    }
+
+    .create-nav{
+        font-size:0;
+    }
+
+    .create-nav::before{
+        content:"+";
+        font-size:25px;
+    }
+}
+
+@media(max-width:850px){
+    .layout{
+        grid-template-columns:70px minmax(0,1fr);
+    }
+
+    .rightbar{
+        display:none;
+    }
+}
+
+@media(max-width:650px){
+    .topbar{
+        height:62px;
+    }
+
+    .topbar-inner{
+        padding:0 13px;
+        gap:10px;
+    }
+
+    .logo-mark{
+        width:37px;
+        height:37px;
+    }
+
+    .logo{
+        min-width:auto;
+    }
+
+    .search-wrap{
+        display:block;
+    }
+
+    .header-actions{
+        gap:4px;
+    }
+
+    .header-actions .icon-btn:first-child{
+        display:none;
+    }
+
+    .icon-btn{
+        width:37px;
+        height:37px;
+    }
+
+    .header-avatar{
+        width:37px;
+        height:37px;
+    }
+
+    .layout{
+        display:block;
+        padding:78px 10px 85px;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .mobile-nav{
+        display:flex;
+        position:fixed;
+        left:8px;
+        right:8px;
+        bottom:8px;
+        height:64px;
+        background:rgba(255,255,255,.93);
+        border:1px solid var(--border);
+        backdrop-filter:blur(18px);
+        border-radius:20px;
+        z-index:200;
+        box-shadow:0 10px 35px rgba(0,0,0,.15);
+        justify-content:space-around;
+        align-items:center;
+        padding:5px;
+    }
+
+    .dark .mobile-nav{
+        background:rgba(22,25,37,.95);
+    }
+
+    .mobile-nav button{
+        flex:1;
+        height:53px;
+        border-radius:14px;
+        background:transparent;
+        color:var(--muted);
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        gap:2px;
+        font-size:9px;
+        font-weight:700;
+    }
+
+    .mobile-nav button svg{
+        width:19px;
+        height:19px;
+    }
+
+    .mobile-nav button.active{
+        background:rgba(118,87,255,.12);
+        color:var(--accent);
+    }
+
+    .mobile-page-title{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:13px;
+    }
+
+    .mobile-page-title h1{
+        font-size:22px;
+    }
+
+    .post{
+        padding:15px;
+        border-radius:17px;
+    }
+
+    .post-body{
+        margin-left:0;
+        margin-top:12px;
+    }
+
+    .post-actions{
+        margin-left:0;
+    }
+
+    .comments{
+        margin-left:0;
+    }
+
+    .composer{
+        padding:14px;
+    }
+
+    .composer-bottom{
+        align-items:flex-end;
+    }
+
+    .composer-tools{
+        flex-wrap:wrap;
+    }
+
+    .tool-btn{
+        padding:6px;
+        font-size:11px;
+    }
+
+    .explore-grid{
+        grid-template-columns:1fr;
+    }
+
+    .messages-layout{
+        grid-template-columns:1fr;
+        min-height:650px;
+    }
+
+    .conversations{
+        display:none;
+    }
+
+    .chat-body{
+        min-height:480px;
+    }
+
+    .profile-cover{
+        height:130px;
+    }
+
+    .profile-main{
+        padding:0 16px 20px;
+    }
+
+    .profile-avatar{
+        width:78px;
+        height:78px;
+        margin-top:-39px;
+    }
+
+    .profile-actions{
+        margin-top:-37px;
+    }
+
+    .stats{
+        gap:18px;
+    }
+}
+
+@media(max-width:390px){
+    .search-wrap{
+        max-width:150px;
+    }
+
+    .logo-text{
+        display:none;
+    }
+
+    .post-action{
+        padding:7px 4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= TOP BAR ================= -->
+
+<header class="topbar">
+    <div class="topbar-inner">
+
+        <div class="logo">
+            <div class="logo-mark">S</div>
+            <div class="logo-text-wrap">
+                <div class="logo-text">SOCIO</div>
+                <span class="logo-tagline">Connect. Share. Discover.</span>
+            </div>
+        </div>
+
+        <div class="search-wrap">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-4-4"></path>
+            </svg>
+            <input id="globalSearch" class="search" placeholder="Search SOCIO..." autocomplete="off">
+        </div>
+
+        <div class="header-actions">
+            <button class="icon-btn" id="themeToggle" title="Toggle dark mode">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.7 6.7 0 0 0 21 12.8Z"></path>
+                </svg>
+            </button>
+
+            <button class="icon-btn" onclick="showPage('notifications')" title="Notifications">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M10 21h4"></path>
+                </svg>
+            </button>
+
+            <div class="header-avatar">S</div>
+        </div>
+    </div>
+</header>
+
+<!-- ================= MAIN LAYOUT ================= -->
+
+<div class="layout">
+
+    <!-- DESKTOP NAV -->
+
+    <aside class="sidebar">
+        <nav class="nav">
+
+            <button class="nav-item active" data-page="home" onclick="showPage('home')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"></path>
+                </svg>
+                <span>Home</span>
+            </button>
+
+            <button class="nav-item" data-page="explore" onclick="showPage('explore')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m20 20-4-4"></path>
+                </svg>
+                <span>Explore</span>
+            </button>
+
+            <button class="nav-item" data-page="create" onclick="focusComposer()">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                <span>Create</span>
+            </button>
+
+            <button class="nav-item" data-page="notifications" onclick="showPage('notifications')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M10 21h4"></path>
+                </svg>
+                <span>Notifications</span>
+            </button>
+
+            <button class="nav-item" data-page="messages" onclick="showPage('messages')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.8 8.8 0 0 1-3-.5L4 20l1.5-4A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"></path>
+                </svg>
+                <span>Messages</span>
+            </button>
+
+            <button class="nav-item" data-page="profile" onclick="showPage('profile')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 21a8 8 0 0 1 16 0"></path>
+                </svg>
+                <span>Profile</span>
+            </button>
+
+            <button class="create-nav" onclick="focusComposer()">
+                <span>+ Create Post</span>
+            </button>
+
+        </nav>
+
+        <div class="demo-note">
+            <strong>SOCIO v1</strong><br>
+            Demo / front-end version.<br>
+            Your local activity is saved in this browser.
+        </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- HOME -->
+
+        <section class="page active" id="page-home">
+
+            <div class="mobile-page-title">
+                <h1>Home</h1>
+            </div>
+
+            <div class="card composer" id="composer">
+                <div class="composer-top">
+                    <div class="avatar avatar-sayed">S</div>
+
+                    <textarea id="postInput" placeholder="What's happening, Sayed?"></textarea>
+                </div>
+
+                <div class="composer-bottom">
+
+                    <div class="composer-tools">
+                        <button class="tool-btn" onclick="showToast('Photo upload is coming in SOCIO v2.')">? Photo</button>
+                        <button class="tool-btn" onclick="showToast('Video upload is coming in SOCIO v2.')">? Video</button>
+                        <button class="tool-btn" onclick="insertHashtag()"># Hashtag</button>
+                    </div>
+
+                    <button class="primary-btn" onclick="createPost()">Post</button>
+                </div>
+            </div>
+
+            <div id="feed"></div>
+
+        </section>
+
+        <!-- EXPLORE -->
+
+        <section class="page" id="page-explore">
+
+            <div class="section-heading">
+                <h1>Explore</h1>
+                <p>Discover what's happening across SOCIO.</p>
+            </div>
+
+            <div class="explore-grid">
+
+                <div class="discover-card">
+                    <h3>#SOCIO</h3>
+                    <p>Join the conversation and discover new people.</p>
+                    <div class="discover-icon">?</div>
+                </div>
+
+                <div class="discover-card">
+                    <h3>#Weekend</h3>
+                    <p>Plans, moments and weekend vibes are trending.</p>
+                    <div class="discover-icon">?</div>
+                </div>
+
+                <div class="discover-card">
+                    <h3>#Cricket</h3>
+                    <p>Latest conversations from cricket fans.</p>
+                    <div class="discover-icon">??</div>
+                </div>
+
+                <div class="discover-card">
+                    <h3>#Technology</h3>
+                    <p>Talk about apps, AI, gadgets and the future.</p>
+                    <div class="discover-icon">?</div>
+                </div>
+
+            </div>
+
+            <div class="card trending-list">
+                <div style="padding:18px 18px 5px">
+                    <div class="widget-title">?? Trending now</div>
+                </div>
+
+                <div class="trend" style="padding:0 18px">
+                    <small>Trending · 1</small>
+                    <strong>#SOCIO</strong>
+                    <span>18.4K posts</span>
+                </div>
+
+                <div class="trend" style="padding:0 18px">
+                    <small>Trending · 2</small>
+                    <strong>#Technology</strong>
+                    <span>12.8K posts</span>
+                </div>
+
+                <div class="trend" style="padding:0 18px">
+                    <small>Trending · 3</small>
+                    <strong>#Weekend</strong>
+                    <span>9.6K posts</span>
+                </div>
+
+                <div class="trend" style="padding:0 18px 18px">
+                    <small>Trending · 4</small>
+                    <strong>#Gaming</strong>
+                    <span>7.3K posts</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- NOTIFICATIONS -->
+
+        <section class="page" id="page-notifications">
+
+            <div class="section-heading">
+                <h1>Notifications</h1>
+                <p>Stay up to date with your SOCIO activity.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="notification">
+                    <div class="avatar avatar-mia">M</div>
+                    <div>
+                        <p><strong>Mia</strong> liked your post ??</p>
+                        <span>8 minutes ago</span>
+                    </div>
+                </div>
+
+                <div class="notification">
+                    <div class="notification-icon">+</div>
+                    <div>
+                        <p><strong>Alex</strong> started following you.</p>
+                        <span>24 minutes ago</span>
+                    </div>
+                </div>
+
+                <div class="notification">
+                    <div class="avatar avatar-jay">J</div>
+                    <div>
+                        <p><strong>Jay</strong> commented on your post.</p>
+                        <span>1 hour ago</span>
+                    </div>
+                </div>
+
+                <div class="notification">
+                    <div class="notification-icon">?</div>
+                    <div>
+                        <p>Your post is getting attention on <strong>#SOCIO</strong>.</p>
+                        <span>3 hours ago</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- MESSAGES -->
+
+        <section class="page" id="page-messages">
+
+            <div class="section-heading">
+                <h1>Messages</h1>
+                <p>Chat with people on SOCIO.</p>
+            </div>
+
+            <div class="card messages-layout">
+
+                <div class="conversations" id="conversationList">
+
+                    <div class="conversation active" onclick="selectConversation('Alex')">
+                        <div class="avatar avatar-alex">A</div>
+                        <div class="conversation-info">
+                            <strong>Alex</strong>
+                            <span>That sounds awesome!</span>
+                        </div>
+                    </div>
+
+                    <div class="conversation" onclick="selectConversation('Mia')">
+                        <div class="avatar avatar-mia">M</div>
+                        <div class="conversation-info">
+                            <strong>Mia</strong>
+                            <span>See you this weekend ??</span>
+                        </div>
+                    </div>
+
+                    <div class="conversation" onclick="selectConversation('Jay')">
+                        <div class="avatar avatar-jay">J</div>
+                        <div class="conversation-info">
+                            <strong>Jay</strong>
+                            <span>Did you see that?</span>
+                        </div>
+                    </div>
+
+                    <div class="conversation" onclick="selectConversation('Jordan')">
+                        <div class="avatar avatar-jordan">J</div>
+                        <div class="conversation-info">
+                            <strong>Jordan</strong>
+                            <span>Nice post!</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="chat">
+
+                    <div class="chat-head">
+                        <div class="avatar avatar-alex">A</div>
+                        <div>
+                            <strong id="chatName">Alex</strong>
+                            <span>? Online</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-body" id="chatBody">
+                        <div class="bubble them">Hey Sayed! Welcome to SOCIO ??</div>
+                        <div class="bubble me">Thanks! I'm building my profile now.</div>
+                        <div class="bubble them">That sounds awesome!</div>
+                    </div>
+
+                    <div class="chat-input">
+                        <input id="messageInput" placeholder="Write a message..." onkeydown="if(event.key==='Enter')sendMessage()">
+                        <button onclick="sendMessage()">?</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- PROFILE -->
+
+        <section class="page" id="page-profile">
+
+            <div class="section-heading">
+                <h1>Profile</h1>
+                <p>Your public SOCIO profile.</p>
+            </div>
+
+            <div class="profile-cover"></div>
+
+            <div class="profile-main">
+
+                <div class="avatar avatar-sayed profile-avatar">S</div>
+
+                <div class="profile-actions">
+                    <button class="outline-btn" onclick="editProfile()">Edit Profile</button>
+                </div>
+
+                <div class="profile-name">Sayed ?</div>
+                <div class="profile-handle">@sayed</div>
+
+                <p class="profile-bio">
+                    Welcome to my SOCIO profile. Connecting, sharing and discovering new things.
+                    ?? #SOCIO
+                </p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <strong id="profilePostsCount">0</strong>
+                        <span>Posts</span>
+                    </div>
+                    <div class="stat">
+                        <strong id="followersCount">248</strong>
+                        <span>Followers</span>
+                    </div>
+                    <div class="stat">
+                        <strong>183</strong>
+                        <span>Following</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="profile-posts" id="profilePosts"></div>
+
+        </section>
+
+        <!-- SEARCH -->
+
+        <section class="page" id="page-search">
+
+            <div class="section-heading">
+                <h1>Search</h1>
+                <p id="searchSubtitle">Search results</p>
+            </div>
+
+            <div id="searchResults"></div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= RIGHT SIDEBAR ================= -->
+
+    <aside class="rightbar">
+
+        <div class="widget">
+
+            <div class="widget-title">Who to follow</div>
+
+            <div class="follow-item">
+                <div class="avatar avatar-alex">A</div>
+                <div class="follow-info">
+                    <strong>Alex</strong>
+                    <span>@alex</span>
+                </div>
+                <button class="follow-btn" data-follow="Alex" onclick="toggleFollow('Alex',this)">Follow</button>
+            </div>
+
+            <div class="follow-item">
+                <div class="avatar avatar-mia">M</div>
+                <div class="follow-info">
+                    <strong>Mia</strong>
+                    <span>@mia</span>
+                </div>
+                <button class="follow-btn" data-follow="Mia" onclick="toggleFollow('Mia',this)">Follow</button>
+            </div>
+
+            <div class="follow-item">
+                <div class="avatar avatar-jay">J</div>
+                <div class="follow-info">
+                    <strong>Jay</strong>
+                    <span>@jay</span>
+                </div>
+                <button class="follow-btn" data-follow="Jay" onclick="toggleFollow('Jay',this)">Follow</button>
+            </div>
+
+            <div class="follow-item">
+                <div class="avatar avatar-jordan">J</div>
+                <div class="follow-info">
+                    <strong>Jordan</strong>
+                    <span>@jordan</span>
+                </div>
+                <button class="follow-btn" data-follow="Jordan" onclick="toggleFollow('Jordan',this)">Follow</button>
+            </div>
+
+        </div>
+
+        <div class="widget">
+
+            <div class="widget-title">?? Trends for you</div>
+
+            <div class="trend">
+                <small>Trending in SOCIO</small>
+                <strong>#SOCIO</strong>
+                <span>18.4K posts</span>
+            </div>
+
+            <div class="trend">
+                <small>Technology</small>
+                <strong>#Technology</strong>
+                <span>12.8K posts</span>
+            </div>
+
+            <div class="trend">
+                <small>Sports</small>
+                <strong>#Cricket</strong>
+                <span>8.2K posts</span>
+            </div>
+
+            <div class="trend">
+                <small>Entertainment</small>
+                <strong>#Gaming</strong>
+                <span>7.3K posts</span>
+            </div>
+
+        </div>
+
+        <div style="font-size:10px;color:var(--muted);padding:4px 8px;line-height:1.6">
+            © 2026 SOCIO · Demo front-end<br>
+            Connect. Share. Discover.
+        </div>
+
+    </aside>
+
+</div>
+
+<!-- ================= MOBILE NAV ================= -->
+
+<nav class="mobile-nav">
+
+    <button class="active" data-page="home" onclick="showPage('home')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"></path>
+        </svg>
+        Home
+    </button>
+
+    <button data-page="explore" onclick="showPage('explore')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+        </svg>
+        Explore
+    </button>
+
+    <button data-page="create" onclick="focusComposer()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        Create
+    </button>
+
+    <button data-page="messages" onclick="showPage('messages')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.8 8.8 0 0 1-3-.5L4 20l1.5-4A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"></path>
+        </svg>
+        Messages
+    </button>
+
+    <button data-page="profile" onclick="showPage('profile')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+        </svg>
+        Profile
+    </button>
+
+</nav>
+
+<!-- ================= MODAL ================= -->
+
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal(event)">
+    <div class="modal" id="modal">
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+/* =========================================================
+   SOCIO v1 — VANILLA JAVASCRIPT
+   Everything is intentionally contained in this file.
+========================================================= */
+
+const STORAGE = {
+    posts: "socio_posts_v1",
+    follows: "socio_follows_v1",
+    theme: "socio_theme_v1"
+};
+
+const users = {
+    Sayed:   { username:"sayed", avatar:"S", avatarClass:"avatar-sayed" },
+    Alex:    { username:"alex", avatar:"A", avatarClass:"avatar-alex" },
+    Mia:     { username:"mia", avatar:"M", avatarClass:"avatar-mia" },
+    Jay:     { username:"jay", avatar:"J", avatarClass:"avatar-jay" },
+    Jordan:  { username:"jordan", avatar:"J", avatarClass:"avatar-jordan" }
+};
+
+const defaultPosts = [
+    {
+        id:"p1",
+        author:"Alex",
+        text:"Exploring new ideas today. The future of social media should feel more human. ?? #SOCIO #Technology",
+        time:"18 min",
+        likes:42,
+        liked:false,
+        comments:[
+            {author:"Mia",text:"Absolutely! Love this idea."},
+            {author:"Sayed",text:"100% agree ??"}
+        ]
+    },
+    {
+        id:"p2",
+        author:"Mia",
+        text:"Weekend plans are officially loading... ?? Good people, good food and good vibes. #Weekend",
+        time:"1 hr",
+        likes:86,
+        liked:false,
+        comments:[
+            {author:"Alex",text:"Sounds perfect!"}
+        ]
+    },
+    {
+        id:"p3",
+        author:"Jay",
+        text:"What is everyone watching lately? I need something new to play tonight ?? #Gaming",
+        time:"2 hrs",
+        likes:31,
+        liked:false,
+        comments:[
+            {author:"Jordan",text:"I've got a few recommendations!"}
+        ]
+    },
+    {
+        id:"p4",
+        author:"Jordan",
+        text:"Big cricket energy today! ?? Who else is following the game? #Cricket",
+        time:"4 hrs",
+        likes:119,
+        liked:false,
+        comments:[]
+    },
+    {
+        id:"p5",
+        author:"Sayed",
+        text:"Welcome to SOCIO. Connect. Share. Discover. ? #SOCIO",
+        time:"Yesterday",
+        likes:24,
+        liked:false,
+        comments:[
+            {author:"Alex",text:"Welcome to SOCIO! ??"}
+        ]
+    }
+];
+
+let posts = loadPosts();
+let follows = JSON.parse(localStorage.getItem(STORAGE.follows) || "{}");
+let activeConversation = "Alex";
+
+/* ================= INITIALIZATION ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadTheme();
+    renderFeed();
+    updateFollowButtons();
+    updateProfile();
+
+    document.getElementById("globalSearch").addEventListener("input", function(){
+        const query = this.value.trim();
+
+        if(query.length > 0){
+            showPage("search", false);
+            performSearch(query);
+        }else if(document.getElementById("page-search").classList.contains("active")){
+            showPage("home");
+        }
+    });
+
+    document.getElementById("postInput").addEventListener("keydown", function(e){
+        if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){
+            createPost();
+        }
+    });
+});
+
+/* ================= STORAGE ================= */
+
+function loadPosts(){
+    try{
+        const saved = localStorage.getItem(STORAGE.posts);
+        if(saved){
+            return JSON.parse(saved);
+        }
+    }catch(e){
+        console.warn("Could not load saved posts.");
+    }
+
+    return JSON.parse(JSON.stringify(defaultPosts));
+}
+
+function savePosts(){
+    localStorage.setItem(STORAGE.posts, JSON.stringify(posts));
+}
+
+/* ================= NAVIGATION ================= */
+
+function showPage(page, clearSearch=true){
+
+    document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("active");
+    });
+
+    const target = document.getElementById("page-" + page);
+
+    if(!target) return;
+
+    target.classList.add("active");
+
+    document.querySelectorAll(".nav-item,.mobile-nav button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === page);
+    });
+
+    if(clearSearch && page !== "search"){
+        document.getElementById("globalSearch").value = "";
+    }
+
+    if(page === "home"){
+        renderFeed();
+    }
+
+    if(page === "profile"){
+        updateProfile();
+    }
+
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function focusComposer(){
+
+    showPage("home");
+
+    setTimeout(() => {
+        const composer = document.getElementById("composer");
+        composer.scrollIntoView({behavior:"smooth",block:"center"});
+
+        setTimeout(() => {
+            document.getElementById("postInput").focus();
+        },250);
+
+    },100);
+}
+
+/* ================= POST SYSTEM ================= */
+
+function createPost(){
+
+    const input = document.getElementById("postInput");
+    const text = input.value.trim();
+
+    if(!text){
+        showToast("Write something first.");
+        input.focus();
+        return;
+    }
+
+    const newPost = {
+        id:"p" + Date.now(),
+        author:"Sayed",
+        text:text,
+        time:"Just now",
+        likes:0,
+        liked:false,
+        own:true,
+        comments:[]
+    };
+
+    posts.unshift(newPost);
+    savePosts();
+
+    input.value = "";
+
+    renderFeed();
+    updateProfile();
+
+    showToast("Your post is live on SOCIO ?");
+}
+
+function renderFeed(){
+
+    const feed = document.getElementById("feed");
+
+    const query = document.getElementById("globalSearch").value.trim().toLowerCase();
+
+    let visible = posts;
+
+    if(query){
+        visible = posts.filter(post => {
+            return (
+                post.text.toLowerCase().includes(query) ||
+                post.author.toLowerCase().includes(query) ||
+                users[post.author].username.toLowerCase().includes(query)
+            );
+        });
+    }
+
+    if(!visible.length){
+        feed.innerHTML = `
+            <div class="card empty">
+                <div class="empty-icon">??</div>
+                <strong>No results found</strong>
+                <p style="margin-top:6px">Try searching for another name, username or topic.</p>
+            </div>
+        `;
+        return;
+    }
+
+    feed.innerHTML = visible.map(postHTML).join("");
+}
+
+function postHTML(post){
+
+    const user = users[post.author] || users.Sayed;
+
+    const formattedText = escapeHTML(post.text)
+        .replace(/(#[a-zA-Z0-9_]+)/g,'<span class="hashtag">$1</span>');
+
+    return `
+        <article class="card post">
+
+            <div class="post-head">
+
+                <div class="avatar ${user.avatarClass}">
+                    ${user.avatar}
+                </div>
+
+                <div class="post-user">
+
+                    <div class="post-name-row">
+                        <span class="post-name">${escapeHTML(post.author)}</span>
+                        ${post.author === "Sayed" ? '<span class="verified">?</span>' : ''}
+                    </div>
+
+                    <span class="post-handle">@${user.username}</span>
+                    <span class="post-time"> · ${escapeHTML(post.time)}</span>
+
+                </div>
+
+                <button class="post-more" onclick="postMenu('${post.id}')">•••</button>
+
+            </div>
+
+            <div class="post-body">${formattedText}</div>
+
+            <div class="post-actions">
+
+                <button
+                    class="post-action ${post.liked ? "liked" : ""}"
+                    onclick="toggleLike('${post.id}')"
+                >
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path d="M20.8 8.8c0 5.5-8.8 10.2-8.8 10.2S3.2 14.3 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"></path>
+                    </svg>
+                    <span>${post.likes}</span>
+                </button>
+
+                <button class="post-action" onclick="toggleComments('${post.id}')">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.8 8.8 0 0 1-3-.5L4 20l1.5-4A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"></path>
+                    </svg>
+                    <span>${post.comments.length}</span>
+                </button>
+
+                <button class="post-action" onclick="sharePost('${post.id}')">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path d="m12 3 6 6-6 6"></path>
+                        <path d="M18 9H7a4 4 0 0 0-4 4v4"></path>
+                    </svg>
+                    <span>Share</span>
+                </button>
+
+                ${post.author === "Sayed" && (post.own || post.id.startsWith("p")) ? `
+                    <button class="post-action" onclick="deletePost('${post.id}')">
+                        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"></path>
+                        </svg>
+                        <span>Delete</span>
+                    </button>
+                ` : ""}
+
+            </div>
+
+            <div id="comments-${post.id}" style="display:none"></div>
+
+        </article>
+    `;
+}
+
+function toggleLike(id){
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    post.liked = !post.liked;
+    post.likes += post.liked ? 1 : -1;
+
+    if(post.likes < 0) post.likes = 0;
+
+    savePosts();
+    renderFeed();
+
+    if(post.liked){
+        showToast("Liked ??");
+    }
+}
+
+function deletePost(id){
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    if(post.author !== "Sayed"){
+        showToast("You can only delete your own posts.");
+        return;
+    }
+
+    posts = posts.filter(p => p.id !== id);
+
+    savePosts();
+    renderFeed();
+    updateProfile();
+
+    showToast("Post deleted.");
+}
+
+function toggleComments(id){
+
+    const container = document.getElementById("comments-" + id);
+
+    if(!container) return;
+
+    if(container.style.display === "none"){
+
+        const post = posts.find(p => p.id === id);
+
+        container.style.display = "block";
+        container.innerHTML = commentsHTML(post);
+
+    }else{
+        container.style.display = "none";
+    }
+}
+
+function commentsHTML(post){
+
+    return `
+        <div class="comments">
+
+            ${
+                post.comments.length
+                ?
+                post.comments.map(comment => {
+
+                    const user = users[comment.author] || users.Sayed;
+
+                    return `
+                        <div class="comment">
+                            <div class="avatar ${user.avatarClass}">${user.avatar}</div>
+                            <div class="comment-content">
+                                <strong>${escapeHTML(comment.author)}</strong>
+                                ${escapeHTML(comment.text)}
+                            </div>
+                        </div>
+                    `;
+
+                }).join("")
+                :
+                `<div style="color:var(--muted);font-size:12px;margin-bottom:10px">
+                    No comments yet. Start the conversation.
+                </div>`
+            }
+
+            <div class="comment-form">
+                <input
+                    id="comment-input-${post.id}"
+                    placeholder="Write a comment..."
+                    onkeydown="if(event.key==='Enter') addComment('${post.id}')"
+                >
+                <button onclick="addComment('${post.id}')">Send</button>
+            </div>
+
+        </div>
+    `;
+}
+
+function addComment(id){
+
+    const input = document.getElementById("comment-input-" + id);
+
+    if(!input) return;
+
+    const text = input.value.trim();
+
+    if(!text){
+        showToast("Write a comment first.");
+        return;
+    }
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    post.comments.push({
+        author:"Sayed",
+        text:text
+    });
+
+    savePosts();
+
+    renderFeed();
+
+    setTimeout(() => {
+        const comments = document.getElementById("comments-" + id);
+
+        if(comments){
+            comments.style.display = "block";
+            comments.innerHTML = commentsHTML(post);
+        }
+    },10);
+
+    showToast("Comment added.");
+}
+
+function sharePost(id){
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(post.text)
+            .then(() => showToast("Post text copied to clipboard."))
+            .catch(() => showToast("Share link copied."));
+    }else{
+        showToast("Post ready to share.");
+    }
+}
+
+function postMenu(id){
+
+    const post = posts.find(p => p.id === id);
+
+    if(!post) return;
+
+    openModal(`
+        <div class="modal-head">
+            <h2>Post options</h2>
+            <button class="close" onclick="closeModal()">×</button>
+        </div>
+
+        <button class="tool-btn" style="width:100%;text-align:left;margin-bottom:6px"
+            onclick="sharePost('${id}');closeModal()">
+            ? Share post
+        </button>
+
+        <button class="tool-btn" style="width:100%;text-align:left;margin-bottom:6px"
+            onclick="showToast('Post reported in demo mode.');closeModal()">
+            ? Report
+        </button>
+
+        ${
+            post.author === "Sayed"
+            ?
+            `<button class="tool-btn" style="width:100%;text-align:left;color:var(--danger)"
+                onclick="deletePost('${id}');closeModal()">
+                ?? Delete post
+            </button>`
+            :
+            ""
+        }
+    `);
+}
+
+/* ================= FOLLOW SYSTEM ================= */
+
+function toggleFollow(name, button){
+
+    follows[name] = !follows[name];
+
+    localStorage.setItem(STORAGE.follows, JSON.stringify(follows));
+
+    updateFollowButtons();
+
+    showToast(
+        follows[name]
+        ? `You are now following ${name}.`
+        : `You unfollowed ${name}.`
+    );
+}
+
+function updateFollowButtons(){
+
+    document.querySelectorAll("[data-follow]").forEach(button => {
+
+        const name = button.dataset.follow;
+        const following = !!follows[name];
+
+        button.textContent = following ? "Following" : "Follow";
+        button.classList.toggle("following", following);
+
+    });
+}
+
+/* ================= SEARCH ================= */
+
+function performSearch(query){
+
+    const q = query.toLowerCase();
+
+    document.getElementById("searchSubtitle").textContent =
+        `Results for "${query}"`;
+
+    const resultContainer = document.getElementById("searchResults");
+
+    const matchingUsers = Object.keys(users).filter(name => {
+
+        const user = users[name];
+
+        return (
+            name.toLowerCase().includes(q) ||
+            user.username.toLowerCase().includes(q)
+        );
+
+    });
+
+    const matchingPosts = posts.filter(post => {
+
+        return (
+            post.text.toLowerCase().includes(q) ||
+            post.author.toLowerCase().includes(q)
+        );
+
+    });
+
+    let html = "";
+
+    if(matchingUsers.length){
+
+        html += `
+            <div class="section-heading" style="margin-top:10px">
+                <h1 style="font-size:17px">People</h1>
+            </div>
+        `;
+
+        html += matchingUsers.map(name => {
+
+            const user = users[name];
+
+            return `
+                <div class="card result-card">
+                    <div class="avatar ${user.avatarClass}">${user.avatar}</div>
+
+                    <div class="follow-info">
+                        <strong>${name}</strong>
+                        <span>@${user.username}</span>
+                    </div>
+
+                    ${
+                        name !== "Sayed"
+                        ?
+                        `<button class="follow-btn ${follows[name] ? "following" : ""}"
+                            data-follow="${name}"
+                            onclick="toggleFollow('${name}',this)">
+                            ${follows[name] ? "Following" : "Follow"}
+                        </button>`
+                        :
+                        `<span style="color:var(--muted);font-size:11px">Your profile</span>`
+                    }
+                </div>
+            `;
+
+        }).join("");
+    }
+
+    if(matchingPosts.length){
+
+        html += `
+            <div class="section-heading" style="margin-top:20px">
+                <h1 style="font-size:17px">Posts</h1>
+            </div>
+        `;
+
+        html += matchingPosts.map(postHTML).join("");
+    }
+
+    if(!html){
+
+        html = `
+            <div class="card empty">
+                <div class="empty-icon">??</div>
+                <strong>No results found</strong>
+                <p style="margin-top:6px">
+                    Try another name, username, hashtag or keyword.
+                </p>
+            </div>
+        `;
+    }
+
+    resultContainer.innerHTML = html;
+}
+
+/* ================= PROFILE ================= */
+
+function updateProfile(){
+
+    const userPosts = posts.filter(post => post.author === "Sayed");
+
+    document.getElementById("profilePostsCount").textContent = userPosts.length;
+
+    const container = document.getElementById("profilePosts");
+
+    if(!userPosts.length){
+
+        container.innerHTML = `
+            <div class="card empty">
+                <div class="empty-icon">?</div>
+                <strong>No posts yet</strong>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = userPosts.map(postHTML).join("");
+}
+
+function editProfile(){
+
+    openModal(`
+        <div class="modal-head">
+            <h2>Edit Profile</h2>
+            <button class="close" onclick="closeModal()">×</button>
+        </div>
+
+        <label style="font-size:12px;font-weight:700">Display name</label>
+
+        <input
+            value="Sayed"
+            style="width:100%;margin:7px 0 14px;padding:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:11px;outline:none"
+        >
+
+        <label style="font-size:12px;font-weight:700">Bio</label>
+
+        <textarea
+            style="width:100%;height:100px;margin-top:7px;padding:11px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:11px;outline:none;resize:none"
+        >Welcome to my SOCIO profile. Connecting, sharing and discovering new things. ?? #SOCIO</textarea>
+
+        <button class="primary-btn" style="width:100%;margin-top:13px"
+            onclick="closeModal();showToast('Profile saved in demo mode.')">
+            Save changes
+        </button>
+    `);
+}
+
+/* ================= MESSAGES ================= */
+
+function selectConversation(name){
+
+    activeConversation = name;
+
+    document.querySelectorAll(".conversation").forEach(el => {
+        el.classList.remove("active");
+
+        if(el.innerText.includes(name)){
+            el.classList.add("active");
+        }
+    });
+
+    document.getElementById("chatName").textContent = name;
+
+    const user = users[name];
+
+    document.querySelector(".chat-head .avatar").className =
+        `avatar ${user.avatarClass}`;
+
+    document.querySelector(".chat-head .avatar").textContent =
+        user.avatar;
+
+    const messages = {
+        Alex:[
+            ["them","Hey Sayed! Welcome to SOCIO ??"],
+            ["me","Thanks! I'm building my profile now."],
+            ["them","That sounds awesome!"]
+        ],
+        Mia:[
+            ["them","Hey! How's your day going?"],
+            ["me","Pretty good! Just checking out SOCIO."],
+            ["them","See you this weekend ??"]
+        ],
+        Jay:[
+            ["them","Did you see that new gaming update?"],
+            ["me","Not yet! Is it good?"],
+            ["them","Yeah, definitely worth checking out."]
+        ],
+        Jordan:[
+            ["them","Nice post!"],
+            ["me","Thanks Jordan ??"],
+            ["them","Keep them coming!"]
+        ]
+    };
+
+    const body = document.getElementById("chatBody");
+
+    body.innerHTML = messages[name].map(msg =>
+        `<div class="bubble ${msg[0]}">${escapeHTML(msg[1])}</div>`
+    ).join("");
+
+    body.scrollTop = body.scrollHeight;
+}
+
+function sendMessage(){
+
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+
+    if(!text) return;
+
+    const body = document.getElementById("chatBody");
+
+    const bubble = document.createElement("div");
+
+    bubble.className = "bubble me";
+    bubble.textContent = text;
+
+    body.appendChild(bubble);
+
+    input.value = "";
+    body.scrollTop = body.scrollHeight;
+
+    setTimeout(() => {
+
+        const reply = document.createElement("div");
+
+        reply.className = "bubble them";
+
+        const replies = [
+            "Nice! ??",
+            "Sounds good!",
+            "Absolutely!",
+            "That's awesome.",
+            "Haha, nice ??"
+        ];
+
+        reply.textContent =
+            replies[Math.floor(Math.random()*replies.length)];
+
+        body.appendChild(reply);
+        body.scrollTop = body.scrollHeight;
+
+    },700);
+}
+
+/* ================= DARK MODE ================= */
+
+document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+    const dark = document.body.classList.contains("dark");
+
+    localStorage.setItem(STORAGE.theme, dark ? "dark" : "light");
+
+    showToast(dark ? "Dark mode enabled." : "Light mode enabled.");
+}
+
+function loadTheme(){
+
+    if(localStorage.getItem(STORAGE.theme) === "dark"){
+        document.body.classList.add("dark");
+    }
+}
+
+/* ================= UTILITIES ================= */
+
+function insertHashtag(){
+
+    const input = document.getElementById("postInput");
+
+    input.value += input.value && !input.value.endsWith(" ")
+        ? " #SOCIO"
+        : "#SOCIO";
+
+    input.focus();
+}
+
+function openModal(content){
+
+    document.getElementById("modal").innerHTML = content;
+
+    document.getElementById("modalBackdrop").classList.add("open");
+}
+
+function closeModal(event){
+
+    if(event && event.target !== document.getElementById("modalBackdrop")){
+        return;
+    }
+
+    document.getElementById("modalBackdrop").classList.remove("open");
+}
+
+function showToast(message){
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    },2200);
+}
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+/* ================= KEYBOARD SHORTCUTS ================= */
+
+document.addEventListener("keydown", e => {
+
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k"){
+
+        e.preventDefault();
+
+        document.getElementById("globalSearch").focus();
+    }
+
+    if(e.key === "Escape"){
+
+        document.getElementById("modalBackdrop").classList.remove("open");
+    }
+});
+</script>
+
+</body>
+</html>
